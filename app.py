@@ -1,5 +1,5 @@
 import sqlite3
-from flask import g, Flask
+from flask import g, Flask, request, Response
 
 app = Flask(__name__)
 
@@ -32,19 +32,28 @@ def get_domains():
     return query_db("""SELECT * FROM domains""")
 
 
+def add_domain(name):
+    db = get_db()
+    db.execute("""INSERT INTO domains (name) VALUES (?)""", (name,))
+    db.commit()
+
+
 @app.route("/")
 def index():
     return {"/domains/": "Domain names to monitor."}
 
 
-@app.route("/domains/")
+@app.route("/domains/", methods=["GET", "POST"])
 def domains():
+    if request.method == "POST":
+        add_domain(request.json["name"])
+        return Response(status=201)
     return {
         "domains": [
             {
-                "name": domain['name'],
-                "is_up": bool(domain['is_up']),
-                "last_check": domain['last_check'],
+                "name": domain["name"],
+                "is_up": bool(domain["is_up"]),
+                "last_check": domain["last_check"],
             }
             for domain in get_domains()
         ]
