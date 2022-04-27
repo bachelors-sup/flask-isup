@@ -8,7 +8,7 @@ from app import DATABASE
 def main():
     db = sqlite3.connect(DATABASE)
     db.row_factory = sqlite3.Row
-    for domain in db.execute("SELECT * FROM domains").fetchall():
+    for domain in db.execute("SELECT * FROM domain").fetchall():
         is_up = False
         try:
             response = requests.head(domain["name"], allow_redirects=True)
@@ -18,7 +18,7 @@ def main():
             is_up = response.status_code == 200
 
         db.execute(
-            "UPDATE domains SET is_up=?, last_check=datetime('now') WHERE name=?",
+            "UPDATE domain SET is_up=?, last_check=datetime('now') WHERE name=?",
             (int(is_up), domain["name"]),
         )
     db.commit()

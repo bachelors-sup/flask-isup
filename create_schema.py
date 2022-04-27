@@ -6,7 +6,7 @@ from app import DATABASE
 def main():
     db = sqlite3.connect(DATABASE)
     db.execute(
-        """CREATE TABLE IF NOT EXISTS domains (
+        """CREATE TABLE IF NOT EXISTS domain (
         name TEXT,
         is_up BOOLEAN,
         last_check DATE

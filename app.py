@@ -29,12 +29,12 @@ def query_db(query, args=(), one=False):
 
 
 def get_domains():
-    return query_db("""SELECT * FROM domains""")
+    return query_db("""SELECT * FROM domain""")
 
 
 def add_domain(name):
     db = get_db()
-    db.execute("""INSERT INTO domains (name) VALUES (?)""", (name,))
+    db.execute("""INSERT INTO domain (name) VALUES (?)""", (name,))
     db.commit()
 
 
